@@ -628,6 +628,131 @@ And when running git status produces this output:
 Remember, you can get helpful hints on what command to run next by running the git status command!
 
 
+-------------------------------------------------------- 
+# Cloning a repository  
+The "git clone" command can copy a repository, along with its full commit history, to another computer.
+
+Using clones as peers
+
+    With Git, every developer has their own repository on their machine, called their local repo.
+    Repos belonging to other developers on the project are referred to as remote repos.
+    Each repo is a full copy of the original repo, including all the version history.
+    Developers can make commits to their own repo, independently of the others.
+    Before beginning work on a new feature, you should use the network to pull commits other developers have made from a remote repo into your local repo, so that you have the latest version of the code.
+    Then you can make your changes, and commit them to your local repo.
+    Other developers will be able to pull the commits you've made over the network to their clones, so they can access them.
+
+Pushing to a central repo
+
+    Any Git repository is capable of pulling from any other repo. Sometimes collaborators pull from each other's repos directly.
+    But it's more common to declare one repo the "central" repo.
+    Developers clone this central repo to their local machines over the network.
+    Then, each developer begins working on their own separate set of changes.
+    A developer adds their changes to this central repo by pushing commits to it over the network. *Other developers receive these commits by pulling them down from the central repo, and they can push up their own changes in return.
+    This is the system that GitHub, Bitbucket and other Git hosting services support.
+
+Cloning repos
+
+The easiest way to get a new repo based off another is to clone it, to make a copy of it. This copy will have all the same files in the working directory, plus a full copy of the project's history.
+
+Normally you clone from one computer to another over the Internet or some other network. But we can also clone from one directory to another on the same computer, and everything will work the same. We're going to do that while we get used to the commands.
+
+To clone the medals repo to a repo in another directory named myclone, change to its parent directory and run:
+
+git clone medals myclone
+
+    The first argument to git clone should be the location of the repository you want to clone. Normally, this would be the URL of a repo out on the network somewhere. But for this demonstration, we just clone from the medals repo in our local directory.
+    The second argument is the name of the directory you want to clone into. We used the name myclone.
+    If we run ls, we'll see a new myclone directory.
+        We can change into that with cd myclone.
+        If we run ls here in the working directory, we'll see copies of all our files.
+        Remember ls -a shows all files, even ones that are hidden by placing a dot at the start of their names... If we run it here, we'll see another .git directory that holds a copy of our repo history.
+
+
+- cd .. = two periods mean parent directory 
+
+--------------------------------------------------------------- 
+# Pulling Changes 
+
+
+
+When commits get added to a Git repository, they aren't automatically copied to clones of that repository. One way to distribute the new commits is to pull them in from other repos.
+
+    In the original medals repo, save a gold.html file that advertises gold medals.
+
+medals/gold.html:
+
+<h1>Check out our gold medals!</h1>
+
+<p>Medallion: $60</p>
+<p>Ribbon: $30</p>
+
+    Stage the file with git add gold.html, and commit it: git commit -m "Add gold medals"
+    git log in the medals repo will show the new commit, but git log in the myclone repo will not.
+    We need to get the commit that adds gold.html from the medals repo to the myclone repo.
+        To do that, we need a link from the myclone repo back to the medals repo.
+        Within a Git repository, you can add links to other repos. These linked repos are referred to as remote repos.
+        We can get a list of remote repos with the git remote command.
+        We see one remote repo listed here, named origin.
+
+$ git remote
+origin
+
+When you clone a Git repo, the original repo is automatically added as a remote on the clone. You can name remote repos whatever you want, but the default used when cloning is origin, because it represents the repo this clone originated from. Because of this default, you'll see a remote repo named origin on most Git repos you work with. In fact, in many cases, the origin repo will be the only remote repo, because everyone on the project just pulls changes from that single repo.
+
+    Since a remote repo is already set up, we're ready to pull changes from it.
+        We do this with the git pull command.
+        git pull takes an argument, with the name of the remote repo you want to pull changes from. So this command will pull from origin:
+
+git pull origin
+
+    But just as the repo we cloned from was set up as a remote repo automatically, it was also set up as the default repo to pull from.
+        So we can actually omit the remote repo name, and just run git pull:
+
+git pull
+
+    Now, we can run git log within the myclone repo. In the output we'll see the "Add gold medals" commit, just like we did in the medals repo.
+
+cd ../medals = means parent directory, medals sub drectory 
+
+------------------------------------------------------------- 
+# Adding Remotes 
+
+Add to myclone/medals.html:
+
+    <div>
+        <a href="gold.html">Gold medals</a>
+    </div>
+    <div>
+        <a href="silver.html">Silver medals</a>
+    </div>
+
+    Then stage the changes: git add medals.html, and commit them: git commit -m "Add links"
+        That commit now appears in our history for the myclone repository.
+    But this commit does not appear in the medals repository.
+    Although we were able to run git pull in the myclone repository to pull in commits from the medals repository, we can't pull from myclone to medals yet.
+    When we cloned the medals repository to the myclone repository, medals was automatically set up as a remote repo on myclone.
+        But the reverse isn't true. In fact, we can try running git remote from the medals repo, and we won't see any remote repos at all.
+    So we're going to need to add myclone as a remote on the medals repo.
+        We can do this with the git remote add subcommand.
+        git remote add takes two arguments:
+        The first is the name we want to give the remote repo. We can use any name we want, but generally it should be all lower-case. We'll use a name of myclone for this remote.
+        The second argument will usually be the URL of the remote repository.
+            But since this "remote" repo is just another directory on our local computer, we'll give it the path to that directory instead: ../myclone
+
+git remote add myclone ../myclone
+
+    Now let's try running git remote again. This time, we'll see a remote repo with the name we specified, myclone.
+    For this first time running git pull, we need to provide two arguments:
+        The remote repo we're pulling from: myclone
+        The "branch" we want to pull: main | UPDATE - Renaming the default branch from master to main.
+        By default, Git repositories start with only one branch, named main.
+        Because we haven't created any other branches, our work in the myclone repo will be on the main branch there, as well.
+
+git pull myclone main
+
+    That command will pull our new commit from the myclone remote repo into the medals repo.
+
 
 
 
