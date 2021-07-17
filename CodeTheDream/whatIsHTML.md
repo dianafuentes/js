@@ -39,3 +39,17 @@ HTML Lists
 <ol> - ordered list  - uses numbers
 <dl> - discription list  
 <li> - bullet point list 
+
+# Creating Links 
+HTML Links 
+    Link from a page on your site to a page on another site to a page on another site 
+    Link from a page on your site to a page on the same site 
+    Link to a different location within the same page
+    Open a page in a new browser window or tab 
+    Begin composing an email in the users default email program 
+
+To create a link that opens in a new tab or window, you use the target attribute and set the value to  "_blank"
+<a href="https://teamtreehouse.com/vr" target="_blank">Start Your VR Journey</a>
+
+ - Sematic HTML
+    Markup that discribes the meaning of content instead of how it looks. 
